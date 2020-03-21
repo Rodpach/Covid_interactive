@@ -38,7 +38,7 @@ Casos_paises = left_join(Casos_paises, paises_dias_uncaso)
 gg_Dia1_America = ggplot(Casos_paises, aes(x=dia, y = Casos, text = Country))+
   geom_line(aes(color = Country), show.legend = F)+
   geom_point(aes(color = Country), show.legend = F)+
-  labs(y = "Casos totales", x = "Dias desde la primera infección", title = "20 de marzo 2020") +
+  labs(y = "Casos totales", x = "Dias desde la primera infección", title = "America - World in Data - 21 de marzo 2020. Otros países: Italia, Corea del Sur y España") +
   theme(legend.position = 'bottom') +
   theme_bw()
 

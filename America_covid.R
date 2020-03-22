@@ -38,13 +38,13 @@ Casos_paises = left_join(Casos_paises, paises_dias_uncaso)
 gg_Dia1_America = ggplot(Casos_paises, aes(x=dia, y = Casos, text = Country))+
   geom_line(aes(color = Country), show.legend = F)+
   geom_point(aes(color = Country), show.legend = F)+
-  labs(y = "Casos totales", x = "Dias desde la primera infección", title = "America - World in Data - 21 de marzo 2020. Otros países: Italia, Corea del Sur y España") +
+  labs(y = "Casos totales", x = "Dias desde la primera infección", title = "America - World in Data - 22 de marzo 2020. Otros países: Italia, Corea del Sur y España") +
   theme(legend.position = 'bottom') +
   theme_bw()
 
 gg_Dia1_America = ggplotly(gg_Dia1_America, tooltip = c("text", "Casos"), dynamicTicks = T)%>% layout(legend = list(orientation = 'v'))
 
-htmlwidgets::saveWidget(gg_Dia1_America, "Covid_interactive/Ita_SK_Spain_Americas.html")
+htmlwidgets::saveWidget(gg_Dia1_America, paste(getwd(),"/Covid_interactive/Ita_SK_Spain_Americas.html", sep = ''))
 
 #GGPLOT
 umbral = 40
@@ -73,23 +73,23 @@ ggplot(Casos_paises, aes(x=dia, y = Casos, text = Country))+
                                                force = .5) +
   theme_classic()+
   scale_x_continuous(breaks = seq(0,40, 2), limits = c(0,40))+
-  scale_y_continuous(breaks = seq(0,1000, 50), limits = c(0,1000))+
+  scale_y_continuous(breaks = seq(0,1300, 50), limits = c(0,1300))+
   scale_color_discrete(breaks = c("Italy", "South Korea","Spain"), 
                        labels = c(paste("Italia. Casos:",max_dates[max_dates$Country == "Italy",3], sep = ""), 
                                   paste("Core del Sur. Casos:",max_dates[max_dates$Country == "South Korea",3], sep = ""),
                                   paste("España Casos:",max_dates[max_dates$Country == "Spain",3], sep = "")))+
   theme(legend.position = 'top') +
-  labs(y = "Casos totales", x = "Días desde la primera infección", title = "World in Data - 21 de marzo 2020. 40 días desde la primera infección", color = "Otros países:")
+  labs(y = "Casos totales", x = "Días desde la primera infección", title = "World in Data - 22 de marzo 2020. 40 días desde la primera infección", color = "Otros países:")
 
-ggsave('Covid_interactive/Casos_primera_infeccion_America_umbral.jpg', width = 8.5, height = 8.5/1.3, units = 'in')
+ggsave(paste(getwd(),'/Covid_interactive/Casos_primera_infeccion_America_umbral.jpg', sep = ""), width = 8.5, height = 8.5/1.3, units = 'in')
 #
 gg_America_dates =ggplot(dplyr::filter(total, Country %in% paises_menos_casos), aes(x=date, y=Casos, text = Country))+
   geom_line(aes(color = Country), show.legend = F)+
   geom_point(aes(color = Country), show.legend = F)+
-  labs(y = "Casos totales", x = "Fecha", title = paste(regions[4], "America - World in Data - 21 de marzo 2020. Otros países: Italia, Corea del Sur y España") ) +
+  labs(y = "Casos totales", x = "Fecha", title = paste(regions[4], "America - World in Data - 22 de marzo 2020. Otros países: Italia, Corea del Sur y España") ) +
   theme(legend.position = 'bottom') +
   theme_bw()
 
 gg_America_dates = ggplotly(gg_America_dates, tooltip = c("text", "date", "Casos"), dynamicTicks = T)%>% layout(legend = list(orientation = 'v'))
 
-htmlwidgets::saveWidget(gg_America_dates, "Covid_interactive/America.html")
+htmlwidgets::saveWidget(gg_America_dates, paste(getwd(),"/Covid_interactive/America.html", sep = ""))

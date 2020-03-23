@@ -83,22 +83,20 @@ gg_casos = ggplot(Casos_paises, aes(x=dia, y = Casos, text = Country))+
   theme(legend.position = 'top',  axis.title = element_text(size=20)) +
   labs(y = "Casos totales", x = "Días desde la primera infección", title = "World in Data - 22 de marzo 2020. Umbral de 40 días desde la primera infección.", color = "Otros países:")
 
-ggsave(paste(getwd(),'/Covid_interactive/Casos_primera_infeccion_America_umbral.jpg', sep = ""), width = 8.5, height = 8.5/1.3, units = 'in')
-
 #LOG
 max_dates = Casos_paises %>% group_by(Country) %>% summarise(date=max(date)) %>% left_join(Casos_paises) %>% mutate(Casos = round(log(Casos), digits = 2))
 
 gg_casos_log = ggplot(Casos_paises, aes(x=dia, y = log(Casos), text = Country))+
   geom_smooth(aes(color = Country), span = 0.25, se =F, show.legend = F)+
   geom_point(aes(color = Country), size = 1, show.legend = F) +
-  geom_text_repel(data = filter(max_dates, dia < max(dia)-15), aes(x=dia, y = Casos, label= paste(Country, "- Casos:", as.character(Casos))), 
+  geom_text_repel(data = filter(max_dates, dia < max(dia)-15), aes(x=dia, y = Casos, label= Country), 
                   angle        = 90,
                   nudge_y = 15,
                   segment.size = 0.4,
                   direction     = "x",
                   segment.color = "black",
                   force = .5) +
-  geom_text_repel(data = filter(max_dates, dia > max(dia)-15), aes(x=dia, y = Casos, label= paste(Country, "- Casos:", as.character(Casos))), 
+  geom_text_repel(data = filter(max_dates, dia > max(dia)-15), aes(x=dia, y = Casos, label= Country), 
                                                angle        = 90,
                   nudge_y = -9,
                   segment.size = 0.4,
@@ -112,7 +110,7 @@ gg_casos_log = ggplot(Casos_paises, aes(x=dia, y = log(Casos), text = Country))+
 
 ggarrange(gg_casos, gg_casos_log, nrow = 2)
 
-ggsave(paste(getwd(),'/Covid_interactive/Casos_primera_infeccion_America_umbral1.jpg', sep = ""), width = 8.5, height = 8.5*2, units = 'in')
+ggsave(paste(getwd(),'/Covid_interactive/Casos_primera_infeccion_America_umbral.jpg', sep = ""), width = 8.5, height = 8.5*2, units = 'in')
 
 #
 gg_America_dates =ggplot(dplyr::filter(total, Country %in% paises_menos_casos), aes(x=date, y=Casos, text = Country))+

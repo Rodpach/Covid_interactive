@@ -4,7 +4,7 @@ library(plotly)
 library(ggrepel)
 library(ggpubr)
 
-fecha = "24 de marzo 2020"
+fecha = "25 de marzo 2020"
 regiones = read_csv("https://raw.githubusercontent.com/Rodpach/Covid_interactive/master/Americas.csv")
 
 total = read_csv("https://covid.ourworldindata.org/data/ecdc/full_data.csv")
@@ -50,7 +50,7 @@ htmlwidgets::saveWidget(gg_Dia1_America, paste(getwd(),"/Covid_interactive/Ita_S
 
 #GGPLOT
 umbral = 40
-limite = 1600
+limite = 2500
 
 max_dates = dplyr::filter(Casos_paises, dia <= umbral) %>% group_by(Country) %>% summarise(date=max(date)) %>% left_join(Casos_paises)
 

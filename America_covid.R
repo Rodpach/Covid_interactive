@@ -3,6 +3,7 @@ library(lubridate)
 library(plotly)
 library(ggrepel)
 library(ggpubr)
+library(tabulizer)
 
 fecha = "25 de marzo 2020"
 regiones = read_csv("https://raw.githubusercontent.com/Rodpach/Covid_interactive/master/Americas.csv")
@@ -50,15 +51,17 @@ htmlwidgets::saveWidget(gg_Dia1_America, paste(getwd(),"/Covid_interactive/Ita_S
 
 #GGPLOT
 umbral = 40
-limite = 2500
+
 
 max_dates = dplyr::filter(Casos_paises, dia <= umbral) %>% group_by(Country) %>% summarise(date=max(date)) %>% left_join(Casos_paises)
+limite = dplyr::filter(max_dates, !Country %in% c("Italy", "South Korea","Spain")) %>% summarise(max = max(Casos))
 
+limite = limite+50
 
 gg_casos = ggplot(Casos_paises, aes(x=dia, y = Casos, text = Country))+
   geom_line(aes(color = Country))+
   geom_point(aes(color = Country)) +
-  geom_text_repel(data = max_dates, aes(x=dia, y = Casos, label= paste(Country, "- Casos:", as.character(Casos))), 
+  geom_text_repel(data = dplyr::filter(max_dates, !Country %in% c("Italy", "South Korea","Spain")), aes(x=dia, y = Casos, label= paste(Country, "- Casos:", as.character(Casos))), 
                   angle        = 90,
                   vjust        = -2,
                   hjust = 3,
@@ -77,10 +80,9 @@ gg_casos = ggplot(Casos_paises, aes(x=dia, y = Casos, text = Country))+
   theme_classic()+
   scale_x_continuous(breaks = seq(0,umbral, 2), limits = c(0,umbral))+
   scale_y_continuous(breaks = seq(0,limite, 50), limits = c(0,limite))+
-  scale_color_discrete(breaks = c("Italy", "South Korea","Spain"), 
+  scale_color_discrete(breaks = c("Italy", "South Korea"), 
                        labels = c(paste("Italia. Casos:",max_dates[max_dates$Country == "Italy",3], sep = ""), 
-                                  paste("Core del Sur. Casos:",max_dates[max_dates$Country == "South Korea",3], sep = ""),
-                                  paste("España Casos:",max_dates[max_dates$Country == "Spain",3], sep = "")))+
+                                  paste("Core del Sur. Casos:",max_dates[max_dates$Country == "South Korea",3], sep = "")))+
   theme(legend.position = 'top',  axis.title = element_text(size=20)) +
   labs(y = "Casos totales", x = "Días desde la primera infección", title = paste("World in Data - ", fecha,". Umbral de 40 días desde la primera infección.", sep = ""), color = "Otros países:")
 
@@ -124,3 +126,7 @@ gg_America_dates =ggplot(dplyr::filter(total, Country %in% paises_menos_casos), 
 gg_America_dates = ggplotly(gg_America_dates, tooltip = c("text", "date", "Casos"), dynamicTicks = T)%>% layout(legend = list(orientation = 'v'))
 
 htmlwidgets::saveWidget(gg_America_dates, paste(getwd(),"/Covid_interactive/America.html", sep = ""))
+
+
+#
+prueba = extract_tables(file = paste(getwd(),'/Covid_interactive/Tabla_casos_positivos_COVID-19_resultado_InDRE_2020.03.22.pdf', sep = ""))  

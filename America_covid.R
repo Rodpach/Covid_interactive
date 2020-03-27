@@ -5,7 +5,7 @@ library(ggrepel)
 library(ggpubr)
 library(tabulizer)
 
-fecha = "25 de marzo 2020"
+fecha = "26 de marzo 2020"
 regiones = read_csv("https://raw.githubusercontent.com/Rodpach/Covid_interactive/master/Americas.csv")
 
 total = read_csv("https://covid.ourworldindata.org/data/ecdc/full_data.csv")
@@ -79,10 +79,10 @@ gg_casos = ggplot(Casos_paises, aes(x=dia, y = Casos, text = Country))+
                                                force = .5) +
   theme_classic()+
   scale_x_continuous(breaks = seq(0,umbral, 2), limits = c(0,umbral))+
-  scale_y_continuous(breaks = seq(0,limite, 50), limits = c(0,limite))+
+  scale_y_continuous(breaks = seq(0,as.numeric(limite), 50), limits = c(0,as.numeric(limite)))+
   scale_color_discrete(breaks = c("Italy", "South Korea"), 
                        labels = c(paste("Italia. Casos:",max_dates[max_dates$Country == "Italy",3], sep = ""), 
-                                  paste("Core del Sur. Casos:",max_dates[max_dates$Country == "South Korea",3], sep = "")))+
+                                  paste("Core del Sur. Casos:",max_dates[max_dates$Country == "South Korea",3], sep = ""))) +
   theme(legend.position = 'top',  axis.title = element_text(size=20)) +
   labs(y = "Casos totales", x = "Días desde la primera infección", title = paste("World in Data - ", fecha,". Umbral de 40 días desde la primera infección.", sep = ""), color = "Otros países:")
 
@@ -126,7 +126,3 @@ gg_America_dates =ggplot(dplyr::filter(total, Country %in% paises_menos_casos), 
 gg_America_dates = ggplotly(gg_America_dates, tooltip = c("text", "date", "Casos"), dynamicTicks = T)%>% layout(legend = list(orientation = 'v'))
 
 htmlwidgets::saveWidget(gg_America_dates, paste(getwd(),"/Covid_interactive/America.html", sep = ""))
-
-
-#
-prueba = extract_tables(file = paste(getwd(),'/Covid_interactive/Tabla_casos_positivos_COVID-19_resultado_InDRE_2020.03.22.pdf', sep = ""))  

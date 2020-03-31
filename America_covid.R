@@ -5,7 +5,7 @@ library(ggrepel)
 library(ggpubr)
 library(tabulizer)
 
-fecha = "27 de marzo 2020"
+fecha = "30 de marzo 2020"
 regiones = read_csv("https://raw.githubusercontent.com/Rodpach/Covid_interactive/master/Americas.csv")
 
 total = read_csv("https://covid.ourworldindata.org/data/ecdc/full_data.csv")
@@ -61,7 +61,7 @@ limite = limite+50
 gg_casos = ggplot(Casos_paises, aes(x=dia, y = Casos, text = Country))+
   geom_line(aes(color = Country))+
   geom_point(aes(color = Country)) +
-  geom_text_repel(data = dplyr::filter(max_dates, !Country %in% c("Italy", "South Korea","Spain")), aes(x=dia, y = Casos, label= paste(Country, "- Casos:", as.character(Casos))), 
+  geom_text_repel(data = dplyr::filter(max_dates, !Country %in% c("Italy")), aes(x=dia, y = Casos, label= paste(Country, "- Casos:", as.character(Casos))), 
                   angle        = 90,
                   vjust        = -2,
                   hjust = 3,
@@ -69,20 +69,11 @@ gg_casos = ggplot(Casos_paises, aes(x=dia, y = Casos, text = Country))+
                   direction     = "x",
                   segment.color = "black",
                   force = .5) +
-  geom_text_repel(data = dplyr::filter(max_dates, Country %in% c("Italy", "South Korea","Spain")), aes(x=dia, y = Casos, label= paste(Country, "- Casos:", as.character(Casos))), 
-                                               angle        = 90,
-                                               vjust        = -2,
-                                               hjust = -100,
-                                               segment.size = 0.4,
-                                               direction     = "x",
-                                               segment.color = "black",
-                                               force = .5) +
   theme_classic()+
   scale_x_continuous(breaks = seq(0,umbral, 2), limits = c(0,umbral))+
-  scale_y_continuous(breaks = seq(0,as.numeric(limite), 50), limits = c(0,as.numeric(limite)))+
-  scale_color_discrete(breaks = c("Italy", "South Korea"), 
-                       labels = c(paste("Italia. Casos:",max_dates[max_dates$Country == "Italy",3], sep = ""), 
-                                  paste("Core del Sur. Casos:",max_dates[max_dates$Country == "South Korea",3], sep = ""))) +
+  scale_y_continuous(breaks = seq(0,as.numeric(limite), 100), limits = c(0,as.numeric(limite)))+
+  scale_color_discrete(breaks = c("Italy"), 
+                       labels = c(paste("Italia. Casos:",max_dates[max_dates$Country == "Italy",3], sep = ""))) +
   theme(legend.position = 'top',  axis.title = element_text(size=20)) +
   labs(y = "Casos totales", x = "Días desde la primera infección", title = paste("World in Data - ", fecha,". Umbral de 40 días desde la primera infección.", sep = ""), color = "Otros países:")
 
@@ -90,8 +81,8 @@ gg_casos = ggplot(Casos_paises, aes(x=dia, y = Casos, text = Country))+
 max_dates = Casos_paises %>% group_by(Country) %>% summarise(date=max(date)) %>% left_join(Casos_paises) %>% mutate(Casos = round(log(Casos), digits = 2))
 
 gg_casos_log = ggplot(Casos_paises, aes(x=dia, y = log(Casos), text = Country))+
-  geom_smooth(aes(color = Country), span = 0.25, se =F, show.legend = F)+
-  geom_point(aes(color = Country), size = 1, show.legend = F) +
+  geom_line(aes(color = Country), show.legend = F)+ #, span = 0.5, se =F, 
+  geom_point(aes(color = Country), size = 0.4, show.legend = F) +
   geom_text_repel(data = filter(max_dates, dia < max(dia)-15), aes(x=dia, y = Casos, label= Country), 
                   angle        = 90,
                   nudge_y = 15,

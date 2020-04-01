@@ -5,7 +5,7 @@ library(ggrepel)
 library(ggpubr)
 library(tabulizer)
 
-fecha = "30 de marzo 2020"
+fecha = "01 de abril 2020"
 regiones = read_csv("https://raw.githubusercontent.com/Rodpach/Covid_interactive/master/Americas.csv")
 
 total = read_csv("https://covid.ourworldindata.org/data/ecdc/full_data.csv")
@@ -71,7 +71,7 @@ gg_casos = ggplot(Casos_paises, aes(x=dia, y = Casos, text = Country))+
                   force = .5) +
   theme_classic()+
   scale_x_continuous(breaks = seq(0,umbral, 2), limits = c(0,umbral))+
-  scale_y_continuous(breaks = seq(0,as.numeric(limite), 100), limits = c(0,as.numeric(limite)))+
+  scale_y_continuous(breaks = seq(0,as.numeric(limite), 300), limits = c(0,as.numeric(limite)))+
   scale_color_discrete(breaks = c("Italy"), 
                        labels = c(paste("Italia. Casos:",max_dates[max_dates$Country == "Italy",3], sep = ""))) +
   theme(legend.position = 'top',  axis.title = element_text(size=20)) +

@@ -5,7 +5,7 @@ library(ggrepel)
 library(ggpubr)
 library(tabulizer)
 
-fecha = "04 de abril 2020"
+fecha = "05 de abril 2020"
 regiones = read_csv("https://raw.githubusercontent.com/Rodpach/Covid_interactive/master/Americas.csv")
 
 total = read_csv("https://covid.ourworldindata.org/data/ecdc/full_data.csv")
@@ -61,7 +61,7 @@ limite = limite+50
 gg_casos = ggplot(Casos_paises, aes(x=dia, y = Casos, text = Country))+
   geom_line(aes(color = Country))+
   geom_point(aes(color = Country)) +
-  geom_text_repel(data = dplyr::filter(max_dates, !Country %in% c("Italy")), aes(x=dia, y = Casos, label= paste(Country, "- Casos:", as.character(Casos))), 
+  geom_text_repel(data = max_dates, aes(x=dia, y = Casos, label= paste(Country, "- Casos:", as.character(Casos))), 
                   angle        = 90,
                   vjust        = -2,
                   hjust = 3,
@@ -72,7 +72,7 @@ gg_casos = ggplot(Casos_paises, aes(x=dia, y = Casos, text = Country))+
   theme_classic()+
   scale_x_continuous(breaks = seq(0,umbral, 2), limits = c(0,umbral))+
   scale_y_continuous(breaks = seq(0,as.numeric(limite), 300), limits = c(0,as.numeric(limite)))+
-  scale_color_discrete(breaks = c("Italy"), 
+  scale_color_discrete(breaks = c(""), 
                        labels = c(paste("Italia. Casos:",max_dates[max_dates$Country == "Italy",3], sep = ""))) +
   theme(legend.position = 'top',  axis.title = element_text(size=20)) +
   labs(y = "Casos totales", x = "Días desde la primera infección", title = paste("World in Data - ", fecha,". Umbral de 40 días desde la primera infección.", sep = ""), color = "Otros países:")

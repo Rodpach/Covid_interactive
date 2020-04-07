@@ -5,7 +5,7 @@ library(ggrepel)
 library(ggpubr)
 library(tabulizer)
 
-fecha = "05 de abril 2020"
+fecha = "07 de abril 2020"
 regiones = read_csv("https://raw.githubusercontent.com/Rodpach/Covid_interactive/master/Americas.csv")
 
 total = read_csv("https://covid.ourworldindata.org/data/ecdc/full_data.csv")

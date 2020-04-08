@@ -5,7 +5,7 @@ library(ggrepel)
 library(ggpubr)
 library(tabulizer)
 
-fecha = "07 de abril 2020"
+fecha = "08 de abril 2020"
 regiones = read_csv("https://raw.githubusercontent.com/Rodpach/Covid_interactive/master/Americas.csv")
 
 total = read_csv("https://covid.ourworldindata.org/data/ecdc/full_data.csv")
@@ -50,7 +50,7 @@ gg_Dia1_America = ggplotly(gg_Dia1_America, tooltip = c("text", "Casos"), dynami
 htmlwidgets::saveWidget(gg_Dia1_America, paste(getwd(),"/Covid_interactive/Ita_SK_Spain_Americas.html", sep = ''))
 
 #GGPLOT
-umbral = 40
+umbral = 45
 
 
 max_dates = dplyr::filter(Casos_paises, dia <= umbral) %>% group_by(Country) %>% summarise(date=max(date)) %>% left_join(Casos_paises)
@@ -75,7 +75,7 @@ gg_casos = ggplot(Casos_paises, aes(x=dia, y = Casos, text = Country))+
   scale_color_discrete(breaks = c(""), 
                        labels = c(paste("Italia. Casos:",max_dates[max_dates$Country == "Italy",3], sep = ""))) +
   theme(legend.position = 'top',  axis.title = element_text(size=20)) +
-  labs(y = "Casos totales", x = "Días desde la primera infección", title = paste("World in Data - ", fecha,". Umbral de 40 días desde la primera infección.", sep = ""), color = "Otros países:")
+  labs(y = "Casos totales", x = "Días desde la primera infección", title = paste("World in Data - ", fecha,". Umbral de ", umbral " días desde la primera infección.", sep = ""), color = "Otros países:")
 
 #LOG
 max_dates = Casos_paises %>% group_by(Country) %>% summarise(date=max(date)) %>% left_join(Casos_paises) %>% mutate(Casos = round(log(Casos), digits = 2))
